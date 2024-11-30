@@ -18,16 +18,16 @@ export default {
       const domainName = domainNamePageMatch.pathname.groups.id;
       console.log(`Received domain name is ${domainName}`);
       if (domainName) {
-        const result = await Deno.resolveDns(domainName, "A");
-        let verb = 'is';
-        if (result.length > 1) {
-          verb = 'are';
+        const ips = await Deno.resolveDns(domainName, "A");
+        let verb = "is";
+        if (ips.length > 1) {
+          verb = "are";
         }
-        let ips = 'none';
-        if (result.length) {
-          ips = JSON.stringify(result);
+        let records = "none";
+        if (ips.length) {
+          records = ips.map((ip) => `${ip} ${domainName}`).join("\n");
         }
-        return new Response(`Resolved ipv4 ${verb} ${ips}`);
+        return new Response(`Resolved ipv4 ${verb}:\n${records}`);
       } else {
         return new Response("Received domain name is empty.");
       }
