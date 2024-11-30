@@ -19,7 +19,15 @@ export default {
       console.log(`Received domain name is ${domainName}`);
       if (domainName) {
         const result = await Deno.resolveDns(domainName, "A");
-        return new Response(`Resolved ipv4 is ${JSON.stringify(result)}`);
+        let verb = 'is';
+        if (result.length > 1) {
+          verb = 'are';
+        }
+        let ips = 'none';
+        if (result.length) {
+          ips = JSON.stringify(result);
+        }
+        return new Response(`Resolved ipv4 ${verb} ${ips}`);
       } else {
         return new Response("Received domain name is empty.");
       }
