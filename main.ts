@@ -19,17 +19,14 @@ export default {
       console.log(`Received domain name is ${domainName}`);
       if (domainName) {
         const ips = await Deno.resolveDns(domainName, "A");
-        let verb = "is";
-        if (ips.length > 1) {
-          verb = "are";
-        }
+
         let records = "none";
         if (ips.length) {
           records = ips.map((ip) => `${ip} ${domainName}`).join("\n");
         }
-        return new Response(`Resolved ipv4 ${verb}:\n${records}`);
+        return new Response(`解析到的 ipv4 地址是：\n${records}\n\n请谨慎使用，解析到的 ipv4 地址可能不是真实的地址。`);
       } else {
-        return new Response("Received domain name is empty.");
+        return new Response("接收到的域名为空。");
       }
     }
 
